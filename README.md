@@ -19,3 +19,14 @@ Offering guarantee of consumption requires giving each subscriber access to even
 The history of events would typically be stored in queues for later access.
 
 This proposal aims at extending the OSGi specification in order to allow consumers to access historical events towards enforcing guarantees of consumption.
+
+## Why
+
+No OSGi specification or API exists to support a Publish/Subscriber event distribution with guarantee of consumption.
+However, use case requiring those guarantees exist.
+
+In practice, projects implement their own ad-hoc queueing mechanism to support a form of journaled events.
+Those queueing mechanism are often brittle, require duplicating code, may or may not rely on proven message queueing infrastructure.
+
+By adding a specification and API to OSGi for journaled events, we would offer a standardise interface to this common feature.
+The implementations of this API will be swappable and sharable among projects towards avoiding ad-hoc solutions to a general use case.
