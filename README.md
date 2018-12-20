@@ -1,4 +1,4 @@
-OSGi journaled-events
+OSGi Journaled Events
 =====================
 
 ## What
