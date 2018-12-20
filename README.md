@@ -18,9 +18,10 @@ However, use cases requiring a guarantee of consumption (e.g. at-least-once, at-
 Offering guarantee of consumption requires giving each subscriber access to events produced before their subscription (historical events).
 The history of events would typically be stored in queues for later access.
 
-This proposal aims at extending the OSGi specification in order to allow consumers to access historical events towards enforcing guarantees of consumption.
+This proposal aims at extending the OSGi specification in order to allow consumers to access historical (journaled) events towards enforcing guarantees of consumption.
 
-## Why
+
+## Why
 
 No OSGi specification or API exists to support a Publish/Subscriber event distribution with guarantee of consumption.
 However, use case requiring those guarantees exist.
