@@ -21,7 +21,7 @@ The history of events would typically be stored in queues for later access.
 This proposal aims at extending the OSGi specification in order to allow consumers to access historical (journaled) events towards enforcing guarantees of consumption.
 
 
-## Why
+## Why
 
 No OSGi specification or API exists to support a Publish/Subscriber event distribution with guarantee of consumption.
 However, use case requiring those guarantees exist.
@@ -31,3 +31,22 @@ Those queueing mechanism are often brittle, require duplicating code, may or may
 
 By adding a specification and API to OSGi for journaled events, we would offer a standardise interface to this common feature.
 The implementations of this API will be swappable and sharable among projects towards avoiding ad-hoc solutions to a general use case.
+
+## How
+
+Journaled events must keep the Publish/Subscribe key feature, decoupling the event publishers and subscribers.
+However, journaled events must give consumers access to historical data.
+
+The [Apache Kafka](https://kafka.apache.org/) publish/subscribe API provides such decoupled journaled distribution of messages.
+Apache Kafka persists messages reliably (according to a configurable retention policy) and indexes each message with monotonically increasing offsets.
+In a nutshell, those offsets specify the ordering of messages as they are produced.
+The offsets are also used by consumers to define the entry point for consuming messages, potentially starting from a messages associated to an offset produced before the consumer started.
+Apache Kafka API allows the consumers to maintain their own consumed offsets.
+This model is interesting as it offers the possibility to provide [exactly-once](https://kafka.apache.org/21/javadoc/index.html?org/apache/kafka/clients/consumer/KafkaConsumer.html) guarantee of processing when the consumer can persist the consumed offset atomically together with the side effect of processing the message.
+
+OSGi journaled events should leverage the Apache Kafka messaging model but in a simplified way.
+Indeed, Apache Kafka focuses on distributing messages reliably and at high throughput across processes were OSGi journaled events could limit to distributing journal events in a single process.
+A simple journaled event model lowers the bar for providing implementations specialised to a context.
+
+The most natural implementation of the journaled event API would be on Apache Kafka, however we foresee that an in-memory implementation and implementation on top of backend supporting sequence natively will be useful as well.
+This should be the case for any RDB, for some document based backends (e.g. Collection on MongoDB).
