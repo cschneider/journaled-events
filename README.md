@@ -1,6 +1,8 @@
 OSGi Journaled Events
 =====================
 
+The goal of this effort is to provide an API (possibly as spec) and backends for journaled streams of events. These extend the publish/subscribe model with means to start consume from an point in the stored event stream history.
+
 ## What
 
 The [OSGi Compendium specification](https://osgi.org/javadoc/osgi.cmpn/7.0.0/) defines the APIs, in the [org.osgi.service.event.\*](https://osgi.org/javadoc/osgi.cmpn/7.0.0/org/osgi/service/event/package-frame.html) packages, to support the distribution of events via the Publish/Subscribe messaging model.
@@ -31,6 +33,15 @@ Those queueing mechanism are often brittle, require duplicating code, may or may
 By adding a specification and API to OSGi for journaled events, we would offer a standardise interface to this common feature.
 The implementations of this API will be swappable and sharable among projects towards avoiding ad-hoc solutions to a general use case.
 
+## Goals
+
+* Provide traditional publish / subscribe semantics
+* Allow consuming a stream from any point in the history (given it is not yet evicted)
+
+## Non Goals
+
+* We explicitly do not cover the extreme scaling of Apache Karaf. So no sharding support in the API (like partitions).
+
 ## How
 
 Journaled events must keep the Publish/Subscribe key feature, decoupling the event publishers and subscribers.
@@ -49,3 +60,6 @@ A simple journaled event model lowers the bar for providing implementations spec
 
 The most natural implementation of the journaled event API would be on Apache Kafka, however we foresee that an in-memory implementation and implementation on top of backend supporting sequence natively will be useful as well.
 This should be the case for any RDB, for some document based backends (e.g. Collection on MongoDB).
+
+## First sketch of an API
+
