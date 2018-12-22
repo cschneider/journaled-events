@@ -62,16 +62,15 @@ The most natural implementation of the journaled event API would be on Apache Ka
 This should be the case for any RDB, for some document based backends (e.g. Collection on MongoDB).
 
 ## First sketch of an API
+
 ```java
-    void send(String topic, Message message);
-    
-    Future<Message> receive(String topic, Position pos);
-
-    Message newMessage(byte[] payload, Map<String, String> props);
-
-    Position positionFromString(String out);
-    
-    String positionToString(Position in);
+    interface JournaledMessaging {
+        void send(String topic, Message message);
+        Closeable subscribe(String topic, Position pos, Consumer<Message> callback);
+        Message newMessage(byte[] payload, Map<String, String> props);
+        Position positionFromString(String out);
+        String positionToString(Position in);
+    }
 
     interface Message {
         byte[] getPayload();
